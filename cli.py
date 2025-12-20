@@ -117,3 +117,64 @@ def add_page(
     except Exception as e:
         typer.secho(f"Error: {e}", fg=typer.colors.RED)
 
+
+@app.command()
+def remove_page(
+    input_path: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        file_okay=True,
+        help="Input PDF file"
+    ),
+    page_num: int = typer.Argument(
+        ...,
+        dir_okay=False,
+        file_okay=True,
+        help="Page number to remove (1-based)"
+    ),
+    output_path: Path = typer.Option(
+        ...,
+        "-o",
+        "--output",
+        help="Output PDF file"
+    ),
+):
+    make_dir(output_path)
+    try:
+        ops.remove_page(str(input_path), page_num, str(output_path))
+        typer.echo(f"Successfully removed page {page_num} from {input_path} -> {output_path}")
+    except Exception as e:
+        typer.secho(f"Error: {e}", fg=typer.colors.RED)
+
+
+@app.command()
+def watermark(
+    input_path: Path = typer.Argument(
+        ...,
+        exists=True,
+        dir_okay=False,
+        file_okay=True,
+        help="Input PDF file"
+    ),
+    watermark_path: Path = typer.Argument(
+        ..., 
+        exists=True,
+        dir_okay=False,
+        file_okay=True,
+        help="Watermark PDF file"
+    ),
+    output_path: Path = typer.Option(
+        ..., 
+        "-o", 
+        "--output", 
+        help="Output PDF file"
+    ),
+):
+    make_dir(output_path)
+    ops.watermark(str(input_path), str(watermark_path), str(output_path))
+    typer.echo(f"Successfully watermarked {input_path} with {watermark_path} -> {output_path}")
+
+
+if __name__ == "__main__":
+    app()

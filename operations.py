@@ -90,7 +90,7 @@ class Operations:
             writer.write(f)
 
 
-    def watermark_pdf(input_path: str, watermark_path: str, output_path: str):
+    def watermark(input_path: str, watermark_path: str, output_path: str):
 
         reader_input = PdfReader(input_path)
         reader_watermark = PdfReader(watermark_path)
