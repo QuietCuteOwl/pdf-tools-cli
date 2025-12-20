@@ -5,6 +5,8 @@ from typing import List
 class Operations:
     def compress(input_pdf: str, output_pdf: str):
 
+        make_dir(output_pdf)
+
         reader = PdfReader(input_pdf)
         writer = PdfWriter()
 
@@ -22,25 +24,42 @@ class Operations:
 
 
     def merge(pdf_paths: List[str], output_path: str):
-        # loop through every input path in the list of pdfs
-        # append the pdf to the merger
-        # open output pdf in mode "wb" and write to it from merger
+
+        make_dir(output_path)
+
+        writer = PdfWriter()
+
+        for pdf in pdf_paths:
+            writer.append(pdf)
+        
+        with open(output_path, "wb") as f:
+            writer.write(f)
+
 
     def split(input_path: str, output_dir: str):
-        # init pdf reader with path to input pdf
-        # get the parent directory of input pdf for output reference
-        # loop through every page in reader with its index
-        # init writer for this single page
-        # add the current page to the writer
-        # construct output filename using the index
-        # open output file in mode "wb" and write to it from writer
+
+        make_dir(output_dir)
+
+        reader = PdfReader(input_path)
+
+        for i, page in enumerate(reader.pages):
+            writer = PdfWriter()
+            writer.add_page(page)
+            
+            output_filename = os.path.join(output_dir, f"page_{i+1}.pdf")
+            with open(output_filename, "wb") as f:
+                writer.write(f)
+
 
     def extract_text(input_path: str) -> str:
-        # init pdf reader with path to input pdf
-        # init empty string variable to hold text
-        # loop through every page in reader
-        # extract text from the page and append it to the string variable
-        # return the text string var
+        reader = PdfReader(input_path)
+
+        text = ""
+
+        for page in reader.pages:
+            text += page.extract_text() + "\n"
+            
+        return text
 
     def add_page(source_pdf: str, page_num: int, target_pdf: str, output_path: str):
         # init reader for the target pdf (the base document)
