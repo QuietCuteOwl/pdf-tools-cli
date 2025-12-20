@@ -5,8 +5,6 @@ from typing import List
 class Operations:
     def compress(input_pdf: str, output_pdf: str):
 
-        make_dir(output_pdf)
-
         reader = PdfReader(input_pdf)
         writer = PdfWriter()
 
@@ -25,8 +23,6 @@ class Operations:
 
     def merge(pdf_paths: List[str], output_path: str):
 
-        make_dir(output_path)
-
         writer = PdfWriter()
 
         for pdf in pdf_paths:
@@ -37,8 +33,6 @@ class Operations:
 
 
     def split(input_path: str, output_dir: str):
-
-        make_dir(output_dir)
 
         reader = PdfReader(input_path)
 
@@ -60,6 +54,7 @@ class Operations:
             text += page.extract_text() + "\n"
             
         return text
+    
 
     def add_page(source_pdf: str, page_num: int, target_pdf: str, output_path: str):
         # page_num is 1-based index for user friendliness
@@ -80,6 +75,7 @@ class Operations:
         with open(output_path, "wb") as f:
             writer.write(f)
 
+
     def remove_page(input_path: str, page_num: int, output_path: str):
         # page_num is 1-based index
 
@@ -92,6 +88,7 @@ class Operations:
 
         with open(output_path, "wb") as f:
             writer.write(f)
+
 
     def watermark_pdf(input_path: str, watermark_path: str, output_path: str):
 
