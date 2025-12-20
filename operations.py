@@ -55,4 +55,20 @@ def add_page(source_pdf: str, page_num: int, target_pdf: str, output_path: str):
     # open output pdf in mode "wb" and write to it from writer
 
 def remove_page(input_path: str, page_num: int, output_path: str):
-    
+    # init pdf reader with path to input pdf
+    # init writer
+    # loop through every page in reader with its index
+    # check if current index is not equal to the page number to remove
+    # if it is not the removed page, add it to the writer
+    # add meta data to writer from reader
+    # open output pdf in mode "wb" and write to it from writer
+
+def watermark_pdf(input_path: str, watermark_path: str, output_path: str):
+    # init reader for input pdf
+    # init reader for watermark pdf
+    # get the first page of the watermark pdf to use as the stamp
+    # init writer
+    # loop through every page in input reader
+    # merge the page with the watermark page contents
+    # add the merged page to the writer
+    # open output pdf in mode "wb" and write to it from writer
