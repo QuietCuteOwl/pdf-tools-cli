@@ -62,33 +62,52 @@ class Operations:
         return text
 
     def add_page(source_pdf: str, page_num: int, target_pdf: str, output_path: str):
-        # init reader for the target pdf (the base document)
-        # init reader for the source pdf (where the new page comes from)
-        # init writer
-        # loop through all pages in target reader and add them to writer
-        # get the specific page from source reader using the page number
-        # add the source page to the writer
-        # add meta data to writer from target reader
-        # open output pdf in mode "wb" and write to it from writer
+        # page_num is 1-based index for user friendliness
+
+        reader_source = PdfReader(source_pdf)
+        reader_target = PdfReader(target_pdf)
+
+        writer = PdfWriter()
+
+        for page in reader_target.pages:
+            writer.add_page(page)
+
+        if 0 < page_num <= len(reader_source.pages):
+            writer.add_page(reader_source.pages[page_num - 1])
+        else:
+            raise ValueError(f"Page number {page_num} is out of range for source PDF")
+
+        with open(output_path, "wb") as f:
+            writer.write(f)
 
     def remove_page(input_path: str, page_num: int, output_path: str):
-        # init pdf reader with path to input pdf
-        # init writer
-        # loop through every page in reader with its index
-        # check if current index is not equal to the page number to remove
-        # if it is not the removed page, add it to the writer
-        # add meta data to writer from reader
-        # open output pdf in mode "wb" and write to it from writer
+        # page_num is 1-based index
+
+        reader = PdfReader(input_path)
+        writer = PdfWriter()
+
+        for i, page in enumerate(reader.pages):
+            if i != (page_num - 1):
+                writer.add_page(page)
+
+        with open(output_path, "wb") as f:
+            writer.write(f)
 
     def watermark_pdf(input_path: str, watermark_path: str, output_path: str):
-        # init reader for input pdf
-        # init reader for watermark pdf
-        # get the first page of the watermark pdf to use as the stamp
-        # init writer
-        # loop through every page in input reader
-        # merge the page with the watermark page contents
-        # add the merged page to the writer
-        # open output pdf in mode "wb" and write to it from writer
+
+        reader_input = PdfReader(input_path)
+        reader_watermark = PdfReader(watermark_path)
+
+        watermark_page = reader_watermark.pages[0]
+
+        writer = PdfWriter()
+
+        for page in reader_input.pages:
+            page.merge_page(watermark_page)
+            writer.add_page(page)
+        
+        with open(output_path, "wb") as f:
+            writer.write(f)
 
 def make_dir(path):
     if not os.path.exists(path):
