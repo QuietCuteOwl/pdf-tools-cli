@@ -1,6 +1,6 @@
 import typer
 from pathlib import Path
-from operations import make_dir, Operations as ops
+from operations import ensure_dir, Operations as ops
 
 app = typer.Typer()
 
@@ -20,7 +20,7 @@ def compress(
         help="Output PDF file"
     ),
 ):
-    make_dir(output_path)
+    ensure_dir(output_path)
     ops.compress(str(input_path), str(output_path))
     typer.echo(f"Successfully compressed {input_path} to {output_path}")
     return
@@ -42,7 +42,7 @@ def merge(
         help="Output PDF file"
     ),
 ):
-    make_dir(output_path)
+    ensure_dir(output_path)
     paths_str = [str(p) for p in input_paths]
     ops.merge(paths_str, str(output_path))
     typer.echo(f"Successfully merged {len(input_paths)} files into {output_path}")
@@ -64,7 +64,7 @@ def split(
         help="Output directory"
     ),
 ):
-    make_dir(output_dir)
+    ensure_dir(output_dir)
     ops.split(str(input_path), str(output_dir))
     typer.echo(f"Successfully split {input_path} into {output_dir}")
 
@@ -110,7 +110,7 @@ def add_page(
         help="Output PDF file"
     ),
 ):
-    make_dir(output_path)
+    ensure_dir(output_path)
     try:
         ops.add_page(str(source_pdf), page_num, str(target_pdf), str(output_path))
         typer.echo(f"Successfully added page {page_num} from {source_pdf} to {target_pdf} -> {output_path}")
@@ -140,7 +140,7 @@ def remove_page(
         help="Output PDF file"
     ),
 ):
-    make_dir(output_path)
+    ensure_dir(output_path)
     try:
         ops.remove_page(str(input_path), page_num, str(output_path))
         typer.echo(f"Successfully removed page {page_num} from {input_path} -> {output_path}")
@@ -171,7 +171,7 @@ def watermark(
         help="Output PDF file"
     ),
 ):
-    make_dir(output_path)
+    ensure_dir(output_path)
     ops.watermark(str(input_path), str(watermark_path), str(output_path))
     typer.echo(f"Successfully watermarked {input_path} with {watermark_path} -> {output_path}")
 

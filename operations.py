@@ -106,7 +106,7 @@ class Operations:
         with open(output_path, "wb") as f:
             writer.write(f)
 
-def make_dir(path):
+def ensure_dir(path):
     if not os.path.exists(path):
         os.makedirs(path)
     return
