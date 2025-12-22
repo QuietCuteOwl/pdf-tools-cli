@@ -1,2 +1,5 @@
-pypdf
-typer
+pypdf2
+click
+reportlab
+pillow
+pathlib
