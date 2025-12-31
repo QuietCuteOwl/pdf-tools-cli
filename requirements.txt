@@ -1,5 +1,5 @@
-pypdf2
+pikepdf
+PyMUpdf
+pypdf
 click
-reportlab
-pillow
 pathlib

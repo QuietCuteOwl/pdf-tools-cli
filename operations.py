@@ -79,16 +79,36 @@ class Operations:
             name, _ = os.path.splitext(os.path.basename(input_pdf))
             tmp_pdf.save(make_output_pdf(f"{name}_removed", output_dir))
 
-    def watermark(input_pdf: str, watermark_pdf: str, output_path: str):
+    def watermark(input_pdf: str, watermark_pdf: str, output_dir: str):
+        from pypdf import PdfReader, PdfWriter, Transformation
+        
+        reader = PdfReader(input_pdf)
+        wm_reader = PdfReader(watermark_pdf)
+        writer = PdfWriter()
 
-        with pikepdf.open(input_pdf) as src, pikepdf.open(watermark_pdf) as wm:
-            wm_page = wm.pages[0]
+        wm_page = wm_reader.pages[0]
 
-            for page in src.pages:
-                page.overlay(wm_page, top=True)
+        wm_w = wm_page.mediabox.width
+        wm_h = wm_page.mediabox.height
 
-            name, _ = os.path.splitext(os.path.basename(input_pdf))
-            src.save(make_output_pdf(f"{name}_watermarked", output_dir))
+        for page in reader.pages:
+            
+            src_w = page.mediabox.width
+            src_h = page.mediabox.height
+
+            scale_x = src_w / wm_w
+            scale_y = src_h / wm_h
+
+            transformation = Transformation().scale(sx=scale_x, sy=scale_y)
+
+            page.merge_transformed_page(wm_page, transformation, over=True)
+
+            writer.add_page(page)
+
+        name, _ = os.path.splitext(os.path.basename(input_pdf))
+        with open(make_output_pdf(f"{name}_watermarked", output_dir), "wb") as f:
+            writer.write(f)
+
 
 def ensure_dir(path):
     if not os.path.isdir(path):
