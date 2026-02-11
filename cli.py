@@ -66,7 +66,7 @@ def remove(input_pdf, page_num, output_dir):
 
 @main.command()
 @click.argument('input_pdf', type=click.Path(exists=True, path_type=Path))
-@click.argument('watermark_pdf', type=click.Path(exists=True, path_type-Path))
+@click.argument('watermark_pdf', type=click.Path(exists=True, path_type=Path))
 @click.option('-o', '--output', 'output_dir', required=False, default='.', help="Output Directory")
 def watermark(input_pdf, watermark_pdf, output_dir):
     ops.watermark(str(input_pdf), str(watermark_pdf), str(output_dir))
